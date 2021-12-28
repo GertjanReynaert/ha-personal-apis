@@ -9,10 +9,9 @@ const mapableResults = (html: any) => {
   return Array.from({ length: amountOfItems }, (_, index) => html[index]);
 };
 
-const getImageSourceFromElement = (element: any): null | string =>
-  element[0]?.attribs.src ?? null;
-const getTextFromElement = (element: any): null | string =>
-  element[0]?.children?.[0]?.data ?? null;
+const getImageSourceFromElement = (element: cheerio.Cheerio) =>
+  element.attr('href') ?? null;
+const getTextFromElement = (element: cheerio.Cheerio) => element.text().trim();
 
 /**
  * Takes date string of dd/mm/yyyy format and returns a UTC date
@@ -48,8 +47,8 @@ const scrape = async () => {
       const parsedEvents = events.map((event) => {
         const eventHTML = cheerio.load(event);
 
-        const [startString, endString] = (
-          getTextFromElement(eventHTML('.media .media-body h4')) ?? ''
+        const [startString, endString] = getTextFromElement(
+          eventHTML('.media .media-body h4')
         )
           .trim()
           .split('tot');
