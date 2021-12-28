@@ -1,6 +1,5 @@
 import { LoaderFunction } from 'remix';
 import * as cheerio from 'cheerio';
-import rp from 'request-promise';
 
 const CALENDAR_HOME_PAGE = 'https://www.waregemexpo.be/kalender/';
 
@@ -27,7 +26,8 @@ const processDate = (stringDate: string) => {
 };
 
 const scrape = async () => {
-  const calendar = await rp(CALENDAR_HOME_PAGE);
+  const calendarResponse = await fetch(CALENDAR_HOME_PAGE);
+  const calendar = await calendarResponse.text();
   const calendarHTML = cheerio.load(calendar);
 
   const yearsHTML = calendarHTML('#kalender-overzicht ul.archief-dates a');
@@ -38,7 +38,8 @@ const scrape = async () => {
 
   const results = await Promise.all(
     years.map(async ({ year, url }) => {
-      const yearCalendar = await rp(url);
+      const yearCalendarResponse = await fetch(url);
+      const yearCalendar = await yearCalendarResponse.text();
       const yearCalendarHTML = cheerio.load(yearCalendar);
 
       const events = mapableResults(
