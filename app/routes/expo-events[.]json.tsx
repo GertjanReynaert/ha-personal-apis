@@ -10,7 +10,7 @@ const mapableResults = (html: any) => {
 };
 
 const getImageSourceFromElement = (element: cheerio.Cheerio) =>
-  element.attr('href') ?? null;
+  element.attr('src') ?? null;
 const getTextFromElement = (element: cheerio.Cheerio) => element.text().trim();
 
 /**
