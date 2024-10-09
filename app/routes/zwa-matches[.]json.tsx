@@ -8,18 +8,18 @@ const getTextFromElement = (element: cheerio.Cheerio) => element.text().trim();
 
 const getMonthFromAbbreviation = (monthAbbreviation: string) => {
 	const months = {
-		januari: 0,
-		februari: 1,
-		maart: 2,
-		april: 3,
-		mei: 4,
-		juni: 5,
-		juli: 6,
-		augustus: 7,
-		september: 8,
-		oktober: 9,
-		november: 10,
-		december: 11,
+		januari: 1,
+		februari: 2,
+		maart: 3,
+		april: 4,
+		mei: 5,
+		juni: 6,
+		juli: 7,
+		augustus: 8,
+		september: 9,
+		oktober: 10,
+		november: 11,
+		december: 12,
 	} as const;
 
 	const defaultMonth = Object.keys(months)[0];
