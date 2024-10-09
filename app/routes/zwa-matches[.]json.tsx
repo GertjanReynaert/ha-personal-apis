@@ -1,8 +1,9 @@
-import { LoaderFunction } from 'remix';
+import { json } from '@remix-run/node';
 import * as cheerio from 'cheerio';
 
 const HOME_PAGE = 'https://www.essevee.be/nl';
 
+// @ts-expect-error unknown cheerio type for html
 const getTextFromElement = (element: cheerio.Cheerio) => element.text().trim();
 
 const getMonthFromAbbreviation = (monthAbbreviation: string) => {
@@ -29,7 +30,7 @@ const getMonthFromAbbreviation = (monthAbbreviation: string) => {
 };
 
 const padValue = (value: string | number, length: number = 2) =>
-	String(value).padStart(2, '0');
+	String(value).padStart(length, '0');
 
 /**
  * Takes date string of 20 okt - 16:00 format and returns a UTC date
@@ -90,15 +91,8 @@ const scrape = async () => {
 	};
 };
 
-export const loader: LoaderFunction = async () => {
-	const parsedEvents = await scrape();
-	const json = JSON.stringify(parsedEvents);
+export const loader = async () => {
+	const scrapedData = await scrape();
 
-	return new Response(json, {
-		headers: {
-			'Cache-Control': `public, max-age=${60 * 10}, s-maxage=${60 * 60 * 24}`,
-			'Content-Type': 'application/json',
-			'Content-Length': String(Buffer.byteLength(json)),
-		},
-	});
+	return json(scrapedData);
 };
